@@ -1,0 +1,116 @@
+<% layout('./layout/page') %>
+<% block('title', "BrainFuck") %>
+<html ng-app="brainApp" xmlns="http://www.w3.org/1999/html">
+
+<body onload="init();" style="margin-top: 50px" ng-controller="View1Controller">
+<script src="angular/angular.js"></script>
+<script type="text/javascript" src="sourse/ng-infinite-scroll.js"></script>
+<script src="sourse/infinityScroll.js"></script>
+<script src="view1/view1.js"></script>
+<script src="/view1/brainApp.js"></script>
+<script src="/sourse/array.js"></script>
+<script src="/sourse/sourseCode.js"></script>
+<script src="/view1/source-service.js"></script>
+<script src="/view1/sourcelist.js"></script>
+<script src="view1/drop-directive.js"></script>
+<section class="container">
+ <main>
+
+    <div id="page">
+
+<form name="mainform" id="mainform">
+<table class="ide" border="1" style="width:100%;background-color: blanchedalmond;">
+	<tr>
+		<td colspan="2" >
+			<div >
+			<ul class="nav navbar-nav"  style="padding-left: 270px;">
+                            <li>
+                                <input type="button" title="Run programm" style="margin-right: 5px; margin-left: 110px; background: rgba(253, 253, 254, 1)" height="35px" width="46px"  ng-click="is_debug = false; setTimeout(0)" value="Run" onclick="run(this.form);" id="button_run" class="btn-default btn-sm">
+                               <span class="sr-only">(current)</span>
+                            </li>
+                            <li>
+                                
+                                <input type="button" title="Enter debug mode" style="margin-right: 5px; background: rgba(253, 253, 254, 1)" height="35px" width="46px"  ng-click="is_debug = true; setTimeout(80)"  value="Start Debugger" onclick="debug_toggle(this.form);" id="button_debug" class="btn-default btn-sm"><span class="sr-only">(current)</span>
+                            </li>
+                            <li>
+                                <input type="button" title="Step in" style="margin-right: 5px; background: rgba(253, 253, 254, 1)" height="35px" width="46px"  ng-click=""  value="Single Step" onclick="run_step();" disabled id="button_step" class="btn-default btn-sm"><span class="sr-only">(current)</span>
+                            </li>
+                            <li>
+                                <input type="button" title="Run to breakpoint" style="margin-right: 5px; background: rgba(253, 253, 254, 1)" height="35px" width="46px"  ng-click=""  value="Run To Breakpoint" onclick="run_debug();" disabled id="button_run_debug" class="btn-default btn-sm"><span class="sr-only">(current)</span>
+                            </li>
+                        </ul>
+                  
+               
+               
+                    
+               
+               
+           
+			</div>			
+		</td>
+        
+		<td>
+            <a align="right" href="" onclick="$('' + ' <form method=POST action=/logout>').submit();return false" style="font-size: 15px; margin-left:50px;">Выход</a>
+        </td>
+	</tr>
+	<tr>
+        <td ng-controller="SourceFileListController" rowspan="1" style="width:20%; vertical-align: text-top;">
+            
+            <div style=" background-color: blanchedalmond;"><b>Solution</b></div><div>
+            <div class="">
+                           
+                <input type="button" title="Create new file" style="margin-left:15px;" height="27px" width="37px"  value="New" ng-click="new()" id="button_save" class="btn-default btn-sm">
+                           
+               <input type="button" title="Delete file"  height="27px" width="37px"  value="Del" ng-click="remove()" id="button_save" class="btn-default btn-sm">
+                           
+                           
+                <input type="button" title="Save file"  height="27px" width="37px"  value="Save" ng-click="save()" id="button_save" class="btn-default btn-sm" ><span class="sr-only">(current)</span>
+                
+                            
+            </div>
+                    <div  style="width: 100%;  overflow: auto; border: lightgray 1px solid; background-color: white;">
+                        <div ng-repeat="file in sourceFiles">
+                            <ul style="list-style-type:none;">
+                            <sourcefiles-directive></sourcefiles-directive>
+                                </ul>
+                        </div>
+                    </div>
+                    <div style="width: 120px;" >
+                        
+                    </div>
+</div></td>
+		<td style="vertical-align: text-top; width:65%"> 	
+<div class="files"></div>
+            <div class="header"><div style=" background-color: blanchedalmond;"><b>Code</b></div></div>
+			<div>
+			
+                    <textarea style="font-family: Courier New, monospace; border: lightgray 1px solid; width:100%" rows="20" id="edit_source" name="source" wrap="virtual" class="edit" ng-model="file.text"></textarea><br>
+                <div style=" background-color: blanchedalmond;"><b>Output:</b></div>
+                    <pre class="viewer" id="outputview" style="height: 90px"> </pre>
+            </div>	</td>
+        <td style="vertical-align: text-top;" rowspan="1">
+            <div style=" background-color: blanchedalmond;"><b>Memory:</b></div>
+                    
+                    <div infinite-scroll="loadMore()" class="scroll" style="min-height: 320px; max-width: 165px; background-color: white;">
+                        <div ng-repeat="line in lines" class="viewer">
+                           <p><input style="border: hidden; background: white" size="4" disabled="true" type="text" ng-value="'0x'+ $index.toString(16)">
+                            <input type="number" min="0" style="max-width: 40px; border: hidden" id="mem" onfocusout="if(value < 0 || value > 255 || value.length == 0) value = 0;" ng-class="{inuse: is_debug && getMemory() == $index}" type="text" ng-model="memory[$index]">
+                            <input style="border: hidden; background: white" size="1" disabled="true" ng-value="tochar(memory[$index])"></p>
+                        </div>
+                    </div>
+        </td>
+	</tr>
+
+	
+</table>
+
+                
+</form>
+
+</div>
+ 
+
+  </main>
+    </section>
+</body>
+</html>

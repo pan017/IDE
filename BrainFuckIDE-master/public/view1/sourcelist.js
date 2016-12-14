@@ -4,8 +4,8 @@ v1.directive("sourcefilesDirective", ['$http', 'SourceService', function($http, 
     return {
         restrict : "AE",
         template:
-        '<li>' + '<style> .selected, .selected:focus { color: gray; } </style>' +
-            '<button ng-class="{selected : isSelected($index)}"  ng-dblclick="rename(file)" ng-click="selectFile($index);select(file);" ng-disabled="is_debug" class="btn-default btn-sm" style="margin: 5px 0px 0px -40px; width: 230px; height: 30px;">{{file.stats.name}}</button><br>'+
+        '<li>' + '<style> .selected, .selected:focus { color: white; background-color:gray; } </style>' +
+            '<div ng-class="{selected : isSelected($index)}"  ng-dblclick="rename(file)" ng-click="selectFile($index);select(file);" ng-disabled="is_debug" class="btn-default btn-sm" style="margin: 5px 0px 0px -40px; width: 100%; ">{{file.stats.name}}</div>'+
         '</li>',
 
         link: function(scope, elem) {

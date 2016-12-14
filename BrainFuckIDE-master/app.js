@@ -7,13 +7,12 @@ var mongoose = require('./libs/mongoose');
 var log = require('./libs/log')(module);
 var HttpError = require('./error').HttpError;
 var app = express();
-
+var passport = require('passport');
+var passp = require('./routes/passport');
 app.engine('ejs', require('ejs-locals'));
 app.set('views', __dirname + '/template');
 app.set('view engine', 'ejs');
 
-
-app.use(express.favicon());
 
 
 if (app.get('env') == 'development') {
@@ -38,7 +37,9 @@ app.use(express.session({
 
 app.use(require('./middleware/sendHttpError'));
 app.use(require('./middleware/loadUser'));
-
+app.use(require('./routes/passport'));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
 
 require('./routes')(app);
@@ -66,63 +67,3 @@ app.use(function(err, req, res, next) {
 http.createServer(app).listen(config.get('port'), function(){
     log.info('Express server listening on port ' + config.get('port'));
 });
-
-/*var express = require('express');
-var http = require('http');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-
-var routes = require('./routes');
-var users = require('./routes/user');
-
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(favicon());
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(app.router);
-
-app.get('/', routes.index);
-app.get('/users', users.list);
-
-/// catch 404 and forwarding to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-/// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
-
-module.exports = app;*/

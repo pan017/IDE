@@ -83,8 +83,28 @@ schema.statics.authorize = function(username, password, callback) {
 };
 
 schema.statics.registration = function(username, password, email, callback) {
-
-
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+var transport = nodemailer.createTransport(
+  smtpTransport({
+    service: 'smtp.mail.ru',
+    auth: {
+      user: 'pan-i@mail.ru',
+      pass: 'nik5236875'
+    }
+  })
+);
+var params = {
+  from: 'pan-i@mail.ru', 
+  to: 'pan017@yandex.by', 
+  subject: 'Hi, body!',
+  text: 'Let\'s read some articles on Web Creation'
+};
+transport.sendMail(params, function (err, res) {
+  if (err) {
+     console.error(err);
+  }
+});
   var User = this;
 
   async.waterfall([

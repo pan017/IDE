@@ -30,6 +30,11 @@ var schema = new Schema({
     unique: false,
     required: true
   },
+  typeSocialNetwork: {
+    type: String,
+    unique: false,
+    required: true
+  },
   hashedPassword: {
     type: String,
     required: true
@@ -83,28 +88,7 @@ schema.statics.authorize = function(username, password, callback) {
 };
 
 schema.statics.registration = function(username, password, email, callback) {
-var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
-var transport = nodemailer.createTransport(
-  smtpTransport({
-    service: 'smtp.mail.ru',
-    auth: {
-      user: 'pan-i@mail.ru',
-      pass: 'nik5236875'
-    }
-  })
-);
-var params = {
-  from: 'pan-i@mail.ru', 
-  to: 'pan017@yandex.by', 
-  subject: 'Hi, body!',
-  text: 'Let\'s read some articles on Web Creation'
-};
-transport.sendMail(params, function (err, res) {
-  if (err) {
-     console.error(err);
-  }
-});
+
   var User = this;
 
   async.waterfall([
@@ -125,6 +109,24 @@ transport.sendMail(params, function (err, res) {
           callback(null, newUser);
          });
       }
+    }
+  ],callback);
+};
+var sess;
+schema.statics.registrationFromSocialNetwork = function(id, type, callback) {
+
+  var User = this;
+
+  async.waterfall([
+    function(callback) {
+      User.findOne({username: id}, callback);
+    },
+    function(user, callback) {
+        var newUser = new User({username: id, typeSocialNetwork: type, isConfirm: true});
+        newUser.save(function(err) {
+	//req.session.user = newUser.id;
+	console.log(newUser);
+      });
     }
   ],callback);
 };

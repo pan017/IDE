@@ -12,8 +12,11 @@ var passp = require('./routes/passport');
 app.engine('ejs', require('ejs-locals'));
 app.set('views', __dirname + '/template');
 app.set('view engine', 'ejs');
-
-
+const VKontakteStrategy = require('passport-vkontakte').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
+var passport = require('passport');
+var User = require('./models/user').User;
 
 if (app.get('env') == 'development') {
     app.use(express.logger('dev'));
@@ -25,6 +28,7 @@ if (app.get('env') == 'development') {
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(express.cookieParser());
+
 
 var MongoStore = require('connect-mongo')(express);
 
